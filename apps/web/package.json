@@ -1,0 +1,35 @@
+{
+  "name": "@repo-radar/web",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint . --ext ts,tsx",
+    "type-check": "tsc -b --noEmit",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.3.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-redux": "^9.1.2",
+    "@mui/material": "^6.1.0",
+    "@mui/icons-material": "^6.1.0",
+    "@mui/x-charts": "^7.18.0",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@tanstack/react-virtual": "^3.10.8",
+    "@repo-radar/github-api": "workspace:*",
+    "@repo-radar/store": "workspace:*",
+    "@repo-radar/ui": "workspace:*",
+    "@repo-radar/charts": "workspace:*"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.2",
+    "vite": "^5.4.9",
+    "typescript": "^5.6.3",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0"
+  }
+}
