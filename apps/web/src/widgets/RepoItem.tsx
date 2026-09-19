@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useRef } from 'react';
-import { useLazyGetLatestCommitQuery } from '@repo-radar/github-api';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useGetLatestCommitQuery } from '@repo-radar/github-api';
 import { RepoCard, RepoCardSkeleton } from '@repo-radar/ui';
 import type { RepoSummary } from '@repo-radar/github-api';
 
@@ -7,7 +7,6 @@ export interface RepoItemProps {
   repo: RepoSummary;
   isTracked: boolean;
   onToggleTrack: (repo: RepoSummary) => void;
-  /** Increments each time the parent wants all cards to refresh simultaneously. */
   refreshSignal?: number;
 }
 
@@ -18,13 +17,19 @@ function parseCommitError(error: unknown): string {
 }
 
 export function RepoItem({ repo, isTracked, onToggleTrack, refreshSignal = 0 }: RepoItemProps) {
-  const [triggerCommit, commitResult] = useLazyGetLatestCommitQuery();
+  const { data, isFetching, isError, error, refetch } = useGetLatestCommitQuery(repo.fullName);
+  const [isManualRefresh, setIsManualRefresh] = useState(false);
 
   const handleRefresh = useCallback(() => {
-    triggerCommit(repo.fullName);
-  }, [repo.fullName, triggerCommit]);
+    setIsManualRefresh(true);
+    refetch();
+  }, [refetch]);
 
-  // Only react to signal increases — not on initial mount.
+  // Reset flag once fetch completes
+  useEffect(() => {
+    if (!isFetching) setIsManualRefresh(false);
+  }, [isFetching]);
+
   const appliedSignalRef = useRef(refreshSignal);
   useEffect(() => {
     if (refreshSignal > appliedSignalRef.current) {
@@ -33,7 +38,7 @@ export function RepoItem({ repo, isTracked, onToggleTrack, refreshSignal = 0 }: 
     }
   }, [refreshSignal, handleRefresh]);
 
-  if (commitResult.isFetching) {
+  if (isFetching && isManualRefresh) {
     return <RepoCardSkeleton />;
   }
 
@@ -42,10 +47,10 @@ export function RepoItem({ repo, isTracked, onToggleTrack, refreshSignal = 0 }: 
       repo={repo}
       isTracked={isTracked}
       onToggleTrack={onToggleTrack}
-      latestCommit={commitResult.data}
-      isRefreshing={false}
-      isRefreshError={commitResult.isError}
-      refreshErrorMessage={commitResult.isError ? parseCommitError(commitResult.error) : undefined}
+      latestCommit={data}
+      isRefreshing={isFetching && !isManualRefresh}
+      isRefreshError={isError}
+      refreshErrorMessage={isError ? parseCommitError(error) : undefined}
       onRefresh={handleRefresh}
     />
   );
