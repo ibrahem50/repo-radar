@@ -61,7 +61,7 @@ packages/
 
 ### State & data layer
 
-**Tracked repos slice** stores the full `TrackedRepoInfo` object (name, owner, avatar, stars, issues, language, description) — not just the `fullName` string. This means:
+**Tracked repos slice** stores the full `TrackedRepoInfo` object (name, owner, avatar, stars, issues, language, description, pushed date) — not just the `fullName` string. This means:
 
 - The Tracked Repos page renders immediately with zero API calls on mount.
 - Stars for the chart come directly from the stored data — no extra network requests.
@@ -72,7 +72,7 @@ packages/
 
 ### API efficiency
 
-GitHub's search endpoint returns `stargazers_count`, `open_issues_count`, `language`, and `owner.avatar_url` inside each search result item — so no per-card detail fetch is needed after a search. All card stats come from the search response directly.
+GitHub's search endpoint returns `stargazers_count`, `open_issues_count`, `language`, `pushed_at`, and `owner.avatar_url` inside each search result item — so no per-card detail fetch is needed after a search. All card stats come from the search response directly.
 
 ### Component unification
 
@@ -86,7 +86,7 @@ A `store.subscribe` listener in `app/store.ts` writes the full tracked-repo reco
 
 - Only **public repositories** are accessible — the token requires no scopes beyond public read.
 - GitHub's search API hard-caps results at **1,000 total** regardless of `total_count`; pagination reflects this.
-- "Last commit date" is the most recent commit on the **default branch** via `/repos/{owner}/{repo}/commits?per_page=1`. It is not fetched automatically — only on explicit refresh — to avoid rate limit exhaustion.
+- "Last commit" on each card is GitHub's `pushed_at` — the time of the last push to **any branch or tag**, so it can differ slightly from the exact commit date on the default branch. It comes with the search/repo response, so it shows immediately with no extra requests. The refresh button still fetches the latest commit via `/repos/{owner}/{repo}/commits?per_page=1`, but that date is only used as a fallback for repos tracked before `pushed_at` was stored.
 - Tracked repos are stored **per-browser** in `localStorage`. No account or sync across devices.
 - No automated test suite included.
 - The stars bar chart shows data as of the last time the repo was tracked or refreshed — it does not live-update.
