@@ -15,7 +15,7 @@ export function SearchPage() {
     query, setQuery,
     page, setPage,
     results, totalPages,
-    isSearching, isError, hasQuery,
+    isSearching, isError, searchError, hasQuery,
     refetchSearch,
   } = useRepoSearch();
   const { trackedFullNames, toggleTrack } = useTrackRepo();
@@ -59,6 +59,7 @@ export function SearchPage() {
         results={results}
         isSearching={isSearching}
         isError={isError}
+        searchError={searchError}
         hasQuery={hasQuery}
         trackedFullNames={trackedFullNames}
         onToggleTrack={toggleTrack}

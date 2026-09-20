@@ -5,14 +5,23 @@ import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
 import { ErrorState, RepoCardSkeleton } from '@repo-radar/ui';
 import type { RepoSummary } from '@repo-radar/github-api';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import type { SerializedError } from '@reduxjs/toolkit';
 import { RepoItem } from './RepoItem';
 
 const SKELETONS = Array.from({ length: 12 }, (_, i) => i);
+
+function parseSearchError(error: FetchBaseQueryError | SerializedError | undefined): string {
+  if (!error) return 'Search failed — check your connection and try again.';
+  const msg = (error as { data?: { message?: string } }).data?.message;
+  return msg ?? 'Search failed — check your connection and try again.';
+}
 
 export interface RepoListWidgetProps {
   results: RepoSummary[];
   isSearching: boolean;
   isError: boolean;
+  searchError?: FetchBaseQueryError | SerializedError;
   hasQuery: boolean;
   trackedFullNames: string[];
   onToggleTrack: (repo: RepoSummary) => void;
@@ -52,6 +61,7 @@ export function RepoListWidget({
   results,
   isSearching,
   isError,
+  searchError,
   hasQuery,
   trackedFullNames,
   onToggleTrack,
@@ -68,10 +78,6 @@ export function RepoListWidget({
     );
   }
 
-  if (isError) {
-    return <ErrorState message="Search failed — check your connection and try again." />;
-  }
-
   const gridSx = {
     display: 'grid',
     gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' },
@@ -86,6 +92,10 @@ export function RepoListWidget({
     );
   }
 
+  if (isError && results.length === 0) {
+    return <ErrorState message={parseSearchError(searchError)} />;
+  }
+
   if (results.length === 0) {
     return (
       <EmptyStateBox
@@ -97,16 +107,21 @@ export function RepoListWidget({
   }
 
   return (
-    <Box sx={gridSx}>
-      {results.map((repo) => (
-        <RepoItem
-          key={repo.id}
-          repo={repo}
-          isTracked={trackedFullNames.includes(repo.fullName)}
-          onToggleTrack={onToggleTrack}
-          refreshSignal={refreshSignal}
-        />
-      ))}
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+      {isError && (
+        <ErrorState message={parseSearchError(searchError)} />
+      )}
+      <Box sx={gridSx}>
+        {results.map((repo) => (
+          <RepoItem
+            key={repo.id}
+            repo={repo}
+            isTracked={trackedFullNames.includes(repo.fullName)}
+            onToggleTrack={onToggleTrack}
+            refreshSignal={refreshSignal}
+          />
+        ))}
+      </Box>
     </Box>
   );
 }

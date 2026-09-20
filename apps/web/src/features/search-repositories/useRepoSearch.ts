@@ -14,7 +14,7 @@ export function useRepoSearch() {
     setPage(1);
   }, [debouncedQuery]);
 
-  const { data, isFetching, isError, refetch } = useSearchReposQuery(
+  const { data, isFetching, isError, error, refetch } = useSearchReposQuery(
     { query: debouncedQuery, page },
     { skip: debouncedQuery.trim().length === 0 },
   );
@@ -32,6 +32,7 @@ export function useRepoSearch() {
     totalCount,
     isSearching: isFetching,
     isError,
+    searchError: error,
     hasQuery: debouncedQuery.trim().length > 0,
     refetchSearch: refetch,
   };
