@@ -10,6 +10,7 @@ export interface RepoSummary {
   language: string | null;
   stargazersCount: number;
   openIssuesCount: number;
+  pushedAt?: string | null;
 }
 
 /** Alias kept for semantic clarity; both endpoints return the same fields. */
@@ -32,6 +33,7 @@ export interface GitHubRepoRaw {
   language: string | null;
   stargazers_count: number;
   open_issues_count: number;
+  pushed_at: string | null;
 }
 
 export interface GitHubSearchResponseRaw {

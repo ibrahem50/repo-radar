@@ -148,16 +148,16 @@ export function RepoCard({
           )}
         </Stack>
 
-        {/* Commit chip — lazy, only after refresh */}
+        {/* Commit chip — pushed_at from the repo payload; commit date only as a fallback when it is missing */}
         {isRefreshing && (
           <Box sx={{ mt: 1 }}>
             <LoadingSkeleton />
           </Box>
         )}
-        {!isRefreshing && latestCommit?.authoredAt && (
+        {!isRefreshing && (repo.pushedAt ?? latestCommit?.authoredAt) && (
           <Chip
             icon={<CommitIcon sx={{ fontSize: '13px !important', color: 'text.disabled !important' }} />}
-            label={`Last commit ${new Date(latestCommit.authoredAt).toLocaleDateString()}`}
+            label={`Last commit ${new Date((repo.pushedAt ?? latestCommit?.authoredAt)!).toLocaleDateString()}`}
             size="small"
             variant="outlined"
             sx={{ mt: 1, fontSize: '0.7rem', height: 22, color: 'text.secondary', borderColor: 'divider' }}

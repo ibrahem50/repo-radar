@@ -23,6 +23,7 @@ function mapRepoSummary(raw: GitHubRepoRaw): RepoSummary {
     language: raw.language,
     stargazersCount: raw.stargazers_count,
     openIssuesCount: raw.open_issues_count,
+    pushedAt: raw.pushed_at,
   };
 }
 

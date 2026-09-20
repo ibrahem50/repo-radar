@@ -11,6 +11,7 @@ export interface TrackedRepoInfo {
   language: string | null;
   stargazersCount: number;
   openIssuesCount: number;
+  pushedAt?: string | null;
 }
 
 export interface TrackedReposState {
