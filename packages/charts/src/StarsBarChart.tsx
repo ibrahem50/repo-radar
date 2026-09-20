@@ -54,6 +54,8 @@ export function StarsBarChart({ data, height = 300 }: StarsBarChartProps) {
             : String(v),
       }]}
       series={[{ dataKey: 'stars', label: 'Stars', color: '#00CCCC' }]}
+      // Item trigger fires on tap; the default axis trigger relies on hover
+      tooltip={{ trigger: 'item' }}
     />
       </Box>
     </Box>
