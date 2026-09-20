@@ -12,6 +12,7 @@ export interface RepoStarsDatum {
 /** Minimum horizontal space per bar so every label stays visible; the chart scrolls sideways beyond this. */
 const MIN_PX_PER_BAR = 70;
 const Y_AXIS_WIDTH = 70;
+const BAR_COLOR = '#00CCCC';
 const PLOT_MARGIN = { top: 50, bottom: 110, left: 10, right: 20 };
 
 function formatStars(v: number): string {
@@ -72,6 +73,12 @@ export function StarsBarChart({ data, height = 300 }: StarsBarChartProps) {
   const selectedDatum = selected == null ? undefined : data[selected];
 
   return (
+    <Box>
+    {/* Legend lives outside the scroll box so it never scrolls out of view */}
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, pl: `${Y_AXIS_WIDTH}px`, pt: 1 }}>
+      <Box sx={{ width: 18, height: 18, borderRadius: '3px', bgcolor: BAR_COLOR }} />
+      <Typography variant="body1" color="text.primary" sx={{ fontWeight: 600 }}>Stars</Typography>
+    </Box>
     <Box sx={{ display: 'flex' }}>
       <Box sx={{ flexShrink: 0, width: Y_AXIS_WIDTH }}>
         <BarChart
@@ -95,7 +102,8 @@ export function StarsBarChart({ data, height = 300 }: StarsBarChartProps) {
             margin={{ ...margin, left: PLOT_MARGIN.left, right: PLOT_MARGIN.right }}
             xAxis={xAxis}
             yAxis={[yAxis]}
-            series={[{ dataKey: 'stars', label: 'Stars', color: '#00CCCC' }]}
+            series={[{ dataKey: 'stars', label: 'Stars', color: BAR_COLOR }]}
+            slotProps={{ legend: { hidden: true } }}
             leftAxis={null}
             // Item trigger fires on tap; the default axis trigger relies on hover
             tooltip={{ trigger: 'item' }}
@@ -130,6 +138,7 @@ export function StarsBarChart({ data, height = 300 }: StarsBarChartProps) {
           )}
         </Box>
       </Box>
+    </Box>
     </Box>
   );
 }
