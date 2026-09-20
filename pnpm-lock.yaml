@@ -88,6 +88,12 @@ importers:
         specifier: ^19.0.0
         version: 19.3.0(react@19.3.0)
     devDependencies:
+      '@mui/material':
+        specifier: ^6.0.0
+        version: 6.5.0(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0))(@types/react@19.3.0)(react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@types/react':
+        specifier: ^19.0.0
+        version: 19.3.0
       typescript:
         specifier: ^5.6.3
         version: 5.9.3

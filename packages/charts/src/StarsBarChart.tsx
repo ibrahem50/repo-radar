@@ -3,8 +3,9 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 export interface RepoStarsDatum {
-  label: string; // repo full name, or short name if you prefer in the caller
+  label: string;
   stars: number;
+  [key: string]: string | number;
 }
 
 export interface StarsBarChartProps {

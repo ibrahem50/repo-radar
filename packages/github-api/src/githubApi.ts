@@ -44,7 +44,7 @@ export const githubApi = createApi({
     // later (via an env var) to raise the unauthenticated 60 req/hr limit.
     prepareHeaders: (headers) => {
       headers.set('Accept', 'application/vnd.github+json');
-      const token = import.meta.env?.VITE_GITHUB_TOKEN as string | undefined;
+      const token = (import.meta as { env?: { VITE_GITHUB_TOKEN?: string } }).env?.VITE_GITHUB_TOKEN;
       if (token) headers.set('Authorization', `Bearer ${token}`);
       return headers;
     },
