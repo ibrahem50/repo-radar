@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
@@ -33,11 +34,14 @@ function getInitialMode(): ThemeMode {
 }
 
 export function App() {
-  const [tab, setTab] = useState<'search' | 'tracked'>('search');
   const [mode, setMode] = useState<ThemeMode>(getInitialMode);
   const trackedCount = useAppSelector(selectTrackedRepoFullNames).length;
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const theme = useMemo(() => createAppTheme(mode), [mode]);
+
+  const tab = location.pathname === '/tracked' ? 'tracked' : 'search';
 
   const toggleMode = () => {
     const next = mode === 'light' ? 'dark' : 'light';
@@ -70,7 +74,7 @@ export function App() {
           </Toolbar>
           <Tabs
             value={tab}
-            onChange={(_, v) => setTab(v)}
+            onChange={(_, v) => navigate(v === 'tracked' ? '/tracked' : '/')}
             sx={{
               px: 2,
               '& .MuiTab-root': { color: 'rgba(255,255,255,0.65)', minHeight: 48 },
@@ -106,12 +110,10 @@ export function App() {
         </AppBar>
 
         <Container maxWidth="xl" sx={{ py: 4, px: { xs: 3, sm: 6, md: 10 } }}>
-          <Box role="tabpanel" hidden={tab !== 'search'}>
-            {tab === 'search' && <SearchPage />}
-          </Box>
-          <Box role="tabpanel" hidden={tab !== 'tracked'}>
-            {tab === 'tracked' && <TrackedReposPage />}
-          </Box>
+          <Routes>
+            <Route path="/" element={<SearchPage />} />
+            <Route path="/tracked" element={<TrackedReposPage />} />
+          </Routes>
         </Container>
       </Box>
     </ThemeProvider>
