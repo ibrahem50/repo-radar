@@ -50,7 +50,6 @@ export function RepoCard({
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        height: '100%',
         borderRadius: 2,
         overflow: 'hidden',
         position: 'relative',

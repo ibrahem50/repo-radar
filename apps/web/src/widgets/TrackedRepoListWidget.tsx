@@ -63,6 +63,7 @@ export function TrackedRepoListWidget() {
         sx={{
           display: 'grid',
           gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' },
+          alignItems: 'stretch',
           gap: 1.5,
         }}
       >
