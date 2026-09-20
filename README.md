@@ -87,6 +87,3 @@ A `store.subscribe` listener in `app/store.ts` writes the full tracked-repo reco
 - Only **public repositories** are accessible — the token requires no scopes beyond public read.
 - GitHub's search API hard-caps results at **1,000 total** regardless of `total_count`; pagination reflects this.
 - "Last commit" on each card is GitHub's `pushed_at` — the time of the last push to **any branch or tag**, so it can differ slightly from the exact commit date on the default branch. It comes with the search/repo response, so it shows immediately with no extra requests. The refresh button still fetches the latest commit via `/repos/{owner}/{repo}/commits?per_page=1`, but that date is only used as a fallback for repos tracked before `pushed_at` was stored.
-- Tracked repos are stored **per-browser** in `localStorage`. No account or sync across devices.
-- No automated test suite included.
-- The stars bar chart shows data as of the last time the repo was tracked or refreshed — it does not live-update.
