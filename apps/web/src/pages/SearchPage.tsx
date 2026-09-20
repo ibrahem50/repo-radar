@@ -64,6 +64,7 @@ export function SearchPage() {
         trackedFullNames={trackedFullNames}
         onToggleTrack={toggleTrack}
         refreshSignal={refreshSignal}
+        onRetrySearch={refetchSearch}
       />
       {hasQuery && totalPages > 1 && (
         <Stack alignItems="center" sx={{ pt: 1, pb: 2 }}>

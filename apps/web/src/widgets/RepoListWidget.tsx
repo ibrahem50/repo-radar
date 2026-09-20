@@ -26,6 +26,7 @@ export interface RepoListWidgetProps {
   trackedFullNames: string[];
   onToggleTrack: (repo: RepoSummary) => void;
   refreshSignal: number;
+  onRetrySearch?: () => void;
 }
 
 
@@ -66,6 +67,7 @@ export function RepoListWidget({
   trackedFullNames,
   onToggleTrack,
   refreshSignal,
+  onRetrySearch,
 }: RepoListWidgetProps) {
 
   if (!hasQuery) {
@@ -93,7 +95,7 @@ export function RepoListWidget({
   }
 
   if (isError && results.length === 0) {
-    return <ErrorState message={parseSearchError(searchError)} />;
+    return <ErrorState message={parseSearchError(searchError)} onRetry={onRetrySearch} />;
   }
 
   if (results.length === 0) {
@@ -109,7 +111,7 @@ export function RepoListWidget({
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       {isError && (
-        <ErrorState message={parseSearchError(searchError)} />
+        <ErrorState message={parseSearchError(searchError)} onRetry={onRetrySearch} />
       )}
       <Box sx={gridSx}>
         {results.map((repo) => (
