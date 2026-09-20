@@ -65,7 +65,6 @@ packages/
 
 - The Tracked Repos page renders immediately with zero API calls on mount.
 - Stars for the chart come directly from the stored data — no extra network requests.
-- The only lazy fetch is the latest commit date, which fires only when the user explicitly clicks Refresh on a card.
 
 **RTK Query lazy queries** (`useLazyGetLatestCommitQuery`) are used for per-card commit fetches. Eager queries (`useGetRepoDetailsQuery`) were intentionally avoided on the tracked page — they would fire for every card on every mount, hitting the rate limit fast.
 
