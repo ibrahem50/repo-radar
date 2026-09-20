@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useGetLatestCommitQuery } from '@repo-radar/github-api';
+import { useLazyGetLatestCommitQuery } from '@repo-radar/github-api';
 import { RepoCard, RepoCardSkeleton } from '@repo-radar/ui';
 import type { RepoSummary } from '@repo-radar/github-api';
 
@@ -17,13 +17,13 @@ function parseCommitError(error: unknown): string {
 }
 
 export function RepoItem({ repo, isTracked, onToggleTrack, refreshSignal = 0 }: RepoItemProps) {
-  const { data, isFetching, isError, error, refetch } = useGetLatestCommitQuery(repo.fullName);
+  const [fetchCommit, { data, isFetching, isError, error }] = useLazyGetLatestCommitQuery();
   const [isManualRefresh, setIsManualRefresh] = useState(false);
 
   const handleRefresh = useCallback(() => {
     setIsManualRefresh(true);
-    refetch();
-  }, [refetch]);
+    fetchCommit(repo.fullName);
+  }, [fetchCommit, repo.fullName]);
 
   // Reset flag once fetch completes
   useEffect(() => {
