@@ -4,7 +4,7 @@ A dashboard for searching GitHub repositories, tracking favorites, and monitorin
 
 ## Live Demo
 
-Deployed on Vercel: _(add your URL here)_
+Deployed on Vercel: _(https://repo-radar-web-five.vercel.app/)_
 
 ---
 
