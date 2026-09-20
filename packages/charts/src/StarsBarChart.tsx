@@ -8,6 +8,9 @@ export interface RepoStarsDatum {
   [key: string]: string | number;
 }
 
+/** Minimum horizontal space per bar so every label stays visible; the chart scrolls sideways beyond this. */
+const MIN_PX_PER_BAR = 70;
+
 export interface StarsBarChartProps {
   data: RepoStarsDatum[];
   height?: number;
@@ -30,14 +33,17 @@ export function StarsBarChart({ data, height = 300 }: StarsBarChartProps) {
   }
 
   return (
+    <Box sx={{ overflowX: 'auto' }}>
+      <Box sx={{ minWidth: data.length * MIN_PX_PER_BAR }}>
     <BarChart
       height={height}
       dataset={data}
-      margin={{ left: 70, right: 20, top: 50, bottom: 60 }}
+      margin={{ left: 70, right: 20, top: 50, bottom: 110 }}
       xAxis={[{
         dataKey: 'label',
         scaleType: 'band',
-        tickLabelStyle: { fontSize: 11 },
+        tickLabelInterval: () => true,
+        tickLabelStyle: { fontSize: 11, angle: -35, textAnchor: 'end' },
       }]}
       yAxis={[{
         valueFormatter: (v: number) =>
@@ -49,5 +55,7 @@ export function StarsBarChart({ data, height = 300 }: StarsBarChartProps) {
       }]}
       series={[{ dataKey: 'stars', label: 'Stars', color: '#00CCCC' }]}
     />
+      </Box>
+    </Box>
   );
 }
